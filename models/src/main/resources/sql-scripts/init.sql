@@ -1,3 +1,1 @@
-INSERT INTO items(name, description, image) VALUES ('PS5', 'test desc', 'base64 string');
-INSERT INTO items(name, description, image) VALUES ('PS5', 'test desc', 'base64 string');
-INSERT INTO items(name, description, image) VALUES ('PS5', 'test desc', 'base64 string');
+INSERT INTO deliveries(userId, itemId, delivererId, address, delivered) VALUES (1, 1, 2, 'Test street 2', false)

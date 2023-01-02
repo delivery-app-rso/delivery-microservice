@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: items-deployment
+  name: delivery-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: items-microservice
+      app: delivery-microservice
   template:
     metadata:
       labels:
-        app: items-microservice
+        app: delivery-microservice
     spec:
       containers:
-        - image: rsouser/items-microservice
-          name: items-microservice
+        - image: rsouser/delivery-microservice
+          name: delivery-microservice
           env:
             - name: DB_HOST
               valueFrom:
@@ -53,7 +53,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: items-service
+  name: delivery-service
 spec:
   type: ClusterIP
   ports:
@@ -61,4 +61,4 @@ spec:
       protocol: TCP
       targetPort: server
   selector:
-    app: items-microservice
+    app: delivery-microservice
