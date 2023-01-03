@@ -148,7 +148,7 @@ public class ServicesBean {
     public JSONObject getDeliverer() {
         try {
             String userStringObject = this.httpClient
-                    .target(servicesProperties.getUsersServiceHost() + "/v1/users/1")
+                    .target(servicesProperties.getUsersServiceHost() + "/v1/users/deliverer")
                     .request().get(new GenericType<String>() {
                     });
 
