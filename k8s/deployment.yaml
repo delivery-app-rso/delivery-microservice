@@ -37,15 +37,29 @@ spec:
                   name: gke-rso-secrets
                   key: db_pass
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
-              value: jdbc:postgresql://${DB_HOST}/${DB_NAME}?user=${DB_USER}@rso-db&password=${DB_PASS}
+              value: jdbc:postgresql://rso-app-db.postgres.database.azure.com:5432/${DB_NAME}?user=dbuser@rso-app-db&password=${DB_PASS}
             - name: KUMULUZEE_DATASOURCES0_USERNAME
               value: ${DB_USER}
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
               value: ${DB_PASS}
             - name: KUMULUZEE_CONFIG_CONSUL_AGENT
               value: http://10.244.1.21:8500
+            - name: KUMULUZEE_NAME
+              value: delivery-microservice
+            - name: KUMULUZEE_ENV_NAME
+              value: dev
+            - name: KUMULUZEE_SERVER_HTTP_PORT
+              value: "8006"
+            - name: KUMULUZEE_SERVER_BASEURL
+              value: http://20.76.184.237/delivery-service/
+            - name: KUMULUZEE_OPENAPIMP_UI_SPECIFICATIONSERVER
+              value: http://20.76.184.237/delivery-service/
+            - name: KUMULUZEE_OPENAPIMP_SERVERS
+              value: http://20.76.184.237/delivery-service/
+            - name: KUMULUZEE_RESTCLIENT_REGISTRATIONS0_URL
+              value: http://10.0.223.203:8080/v1
           ports:
-            - containerPort: 8080
+            - containerPort: 8006
               name: server
               protocol: TCP
 
