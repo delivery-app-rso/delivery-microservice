@@ -52,3 +52,9 @@ kumuluzee:
     registrations:
       - class: mail-process-api
         read-timeout: 5000
+  kumuluzee:
+    cors-filter:
+      annotations:
+        my-resource:
+          allow-origin: "*"
+          allow-subdomains: true

@@ -22,6 +22,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import com.kumuluz.ee.cors.annotations.CrossOrigin;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -29,6 +32,7 @@ import java.util.logging.Logger;
 @Path("/deliveries")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@CrossOrigin(allowOrigin = "*")
 public class DeliveryResource {
 
         private Logger log = Logger.getLogger(DeliveryResource.class.getName());
