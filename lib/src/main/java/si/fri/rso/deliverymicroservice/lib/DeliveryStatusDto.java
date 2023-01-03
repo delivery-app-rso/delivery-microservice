@@ -7,6 +7,10 @@ public class DeliveryStatusDto {
         this.delivered = status;
     }
 
+    public DeliveryStatusDto() {
+
+    }
+
     public Boolean getDelivered() {
         return delivered;
     }
