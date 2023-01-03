@@ -8,6 +8,9 @@ import javax.persistence.TypedQuery;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.UriInfo;
 
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.json.JSONObject;
 
@@ -19,6 +22,7 @@ import si.fri.rso.deliverymicroservice.lib.NavigationDto;
 import si.fri.rso.deliverymicroservice.models.converters.DeliveryConverter;
 import si.fri.rso.deliverymicroservice.models.entities.DeliveryEntity;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -75,12 +79,12 @@ public class DeliveryBean {
     }
 
     public Delivery startDelivery(DeliveryDto deliveryDto) {
-        // Get deliverer id randomly from users service
-
+        JSONObject delivererJsonObject = servicesBean.getDeliverer();
+        System.out.println(delivererJsonObject);
         Delivery delivery = new Delivery();
         delivery.setUserId(deliveryDto.getUserId());
         delivery.setDelivered(false);
-        delivery.setDelivererId(deliveryDto.getDelivererId());
+        delivery.setDelivererId(delivererJsonObject.getInt("id"));
         delivery.setAddress(deliveryDto.getAddress());
         delivery.setItemId(deliveryDto.getItemId());
 
@@ -95,6 +99,12 @@ public class DeliveryBean {
 
         JSONObject navigationJsonObject = servicesBean.createNavigation(new NavigationDto(delivery.getId(),
                 userJsonObject.getString("address"), deliveryDto.getAddress()));
+
+        if (userJsonObject == null || itemJsonObject == null || navigationJsonObject == null) {
+            System.out.println("failed to fetch data!");
+            return null;
+        }
+
         Float tripCost = this.getDeliveryCost(navigationJsonObject);
 
         InvoiceDto invoiceDto = new InvoiceDto(String.valueOf(deliveryDto.getUserId()),
@@ -109,6 +119,11 @@ public class DeliveryBean {
         servicesBean.sendDeliveryStartedEmail(userJsonObject, itemJsonObject);
 
         return delivery;
+    }
+
+    public Delivery startDeliveryFallback(DeliveryDto deliveryDto) {
+        System.out.println("notr w fallbacku");
+        return null;
     }
 
     public Delivery creatDelivery(Delivery delivery) {

@@ -13,6 +13,9 @@ kumuluzee:
       password: postgres
       pool:
         max-size: 20
+  openapi-mp:
+    ui:
+      mapping: /openapi/ui
   health:
     checks:
       data-source-health-check:

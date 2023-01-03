@@ -61,7 +61,7 @@ public class DeliveryResource {
 
         @Operation(description = "Get deliveries for user.", summary = "Get deliveries")
         @APIResponses({
-                        @APIResponse(responseCode = "200", description = "Deliveries data for user", content = @Content(schema = @Schema(implementation = Delivery.class))) })
+                        @APIResponse(responseCode = "200", description = "Deliveries data for user", content = @Content(schema = @Schema(implementation = Delivery.class, type = SchemaType.ARRAY))) })
         @GET
         @Path("/{userId}")
         public Response getUserDeliveries(
@@ -75,18 +75,22 @@ public class DeliveryResource {
         @Operation(description = "Start delivery.", summary = "Start delivery")
         @APIResponses({
                         @APIResponse(responseCode = "201", description = "Delivery successfully started."),
-                        @APIResponse(responseCode = "405", description = "Validation error .")
+                        @APIResponse(responseCode = "400", description = "Bad request error .")
         })
         @POST
         public Response startDelivery(
                         @RequestBody(description = "DTO object with delivery data.", required = true, content = @Content(schema = @Schema(implementation = DeliveryDto.class))) DeliveryDto deliveryDto) {
 
-                if (deliveryDto.getUserId() == null || deliveryDto.getDelivererId() == null
+                if (deliveryDto.getUserId() == null || deliveryDto.getAddress() == null
                                 || deliveryDto.getItemId() == null) {
                         return Response.status(Response.Status.BAD_REQUEST).build();
                 }
 
                 Delivery delivery = deliveryBean.startDelivery(deliveryDto);
+
+                if (delivery == null) {
+                        return Response.status(Response.Status.CONFLICT).build();
+                }
 
                 return Response.status(Response.Status.CREATED).entity(delivery).build();
 
@@ -94,7 +98,8 @@ public class DeliveryResource {
 
         @Operation(description = "Update delivery.", summary = "Update delivery")
         @APIResponses({
-                        @APIResponse(responseCode = "200", description = "delivery successfully updated.")
+                        @APIResponse(responseCode = "200", description = "delivery successfully updated."),
+                        @APIResponse(responseCode = "404", description = "Delivery not found.")
         })
         @POST
         @Path("/{deliveryId}/set-status")
@@ -105,7 +110,7 @@ public class DeliveryResource {
                 Delivery delivery = deliveryBean.setDeliveryStatus(deliveryId, deliveryStatusDto);
 
                 if (delivery == null) {
-                        return Response.status(Response.Status.NOT_MODIFIED).build();
+                        return Response.status(Response.Status.NOT_FOUND).build();
                 }
 
                 return Response.status(Response.Status.OK).entity(delivery).build();
@@ -114,7 +119,7 @@ public class DeliveryResource {
 
         @Operation(description = "Delete delivery.", summary = "Delete delivery")
         @APIResponses({
-                        @APIResponse(responseCode = "200", description = "Delivery successfully deleted."),
+                        @APIResponse(responseCode = "204", description = "Delivery successfully deleted."),
                         @APIResponse(responseCode = "404", description = "Not found.")
         })
         @DELETE

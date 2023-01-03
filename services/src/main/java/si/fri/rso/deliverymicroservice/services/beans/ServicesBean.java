@@ -145,6 +145,21 @@ public class ServicesBean {
         }
     }
 
+    public JSONObject getDeliverer() {
+        try {
+            String userStringObject = this.httpClient
+                    .target(servicesProperties.getUsersServiceHost() + "/v1/users/1")
+                    .request().get(new GenericType<String>() {
+                    });
+
+            JSONObject userJsonObject = new JSONObject(userStringObject);
+            return userJsonObject;
+        } catch (WebApplicationException | ProcessingException e) {
+            System.out.println(e.getMessage());
+            throw new InternalServerErrorException(e);
+        }
+    }
+
     public JSONObject generateInvoice(InvoiceDto invoiceDto) {
         JSONObject body = new JSONObject();
         JSONObject deliveryData = new JSONObject(invoiceDto.getDelieryData().toString().replaceAll("=", ":"));

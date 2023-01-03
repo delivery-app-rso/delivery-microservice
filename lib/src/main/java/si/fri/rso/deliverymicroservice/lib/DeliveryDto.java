@@ -4,8 +4,6 @@ public class DeliveryDto {
 
     private Integer userId;
 
-    private Integer delivererId;
-
     private Integer itemId;
 
     private String address;
@@ -16,14 +14,6 @@ public class DeliveryDto {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public Integer getDelivererId() {
-        return delivererId;
-    }
-
-    public void setDelivererId(Integer delivererId) {
-        this.delivererId = delivererId;
     }
 
     public Integer getItemId() {
