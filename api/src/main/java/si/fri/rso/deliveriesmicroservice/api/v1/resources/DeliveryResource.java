@@ -76,6 +76,19 @@ public class DeliveryResource {
                 return Response.status(Response.Status.OK).entity(deliveries).build();
         }
 
+        @Operation(description = "Get deliveries for deliverer.", summary = "Get deliveries")
+        @APIResponses({
+                        @APIResponse(responseCode = "200", description = "Deliveries data for deliverer", content = @Content(schema = @Schema(implementation = Delivery.class, type = SchemaType.ARRAY))) })
+        @GET
+        @Path("/deliverer/{userId}")
+        public Response getDelivererDeliveries(
+                        @Parameter(description = "user ID.", required = true) @PathParam("userId") Integer userId) {
+
+                List<Delivery> deliveries = deliveryBean.getDelivererDeliveries(userId);
+
+                return Response.status(Response.Status.OK).entity(deliveries).build();
+        }
+
         @Operation(description = "Start delivery.", summary = "Start delivery")
         @APIResponses({
                         @APIResponse(responseCode = "201", description = "Delivery successfully started."),

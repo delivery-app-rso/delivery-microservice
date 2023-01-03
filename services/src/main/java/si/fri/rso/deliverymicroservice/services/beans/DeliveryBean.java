@@ -78,6 +78,15 @@ public class DeliveryBean {
         return resultsList.stream().map(DeliveryConverter::toDto).collect(Collectors.toList());
     }
 
+    public List<Delivery> getDelivererDeliveries(Integer userId) {
+        List<DeliveryEntity> resultsList = (List<DeliveryEntity>) em
+                .createQuery("SELECT d FROM DeliveryEntity d WHERE d.delivererId=:userId ")
+                .setParameter("userId", userId)
+                .getResultList();
+
+        return resultsList.stream().map(DeliveryConverter::toDto).collect(Collectors.toList());
+    }
+
     public Delivery startDelivery(DeliveryDto deliveryDto) {
         JSONObject delivererJsonObject = servicesBean.getDeliverer();
         System.out.println(delivererJsonObject);
